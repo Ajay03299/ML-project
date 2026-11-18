@@ -36,7 +36,8 @@ def parser(description: str) -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=description)
     ap.add_argument("--source", default=config.SOURCE, choices=["synthetic", "madrid", "pems04"])
     ap.add_argument("--n-sensors", type=int, default=config.N_SENSORS)
-    ap.add_argument("--horizon", type=int, default=config.HORIZON, help="steps ahead (4 x 15 min = 60 min)")
+    ap.add_argument("--horizon-min", type=int, default=config.HORIZON_MIN, help="minutes ahead (default 60)")
+    ap.add_argument("--horizon", type=int, default=None, help="steps ahead; overrides --horizon-min")
     ap.add_argument("--max-train-rows", type=int, default=config.MAX_TRAIN_ROWS)
     ap.add_argument("--tune-rows", type=int, default=config.TUNE_ROWS)
     ap.add_argument("--quick", action="store_true", help="tiny grids and samples, to check the script runs")
@@ -46,6 +47,8 @@ def parser(description: str) -> argparse.ArgumentParser:
 def get_data(args, groups=GROUPS, holdout: bool = False, neighbor_method: str = "corr"):
     """Panel plus the split dict that evaluate_model expects. Identical for everyone."""
     panel = load_panel(args.source, n_sensors=args.n_sensors)
+    if args.horizon is None:
+        args.horizon = max(1, args.horizon_min // panel.step_min)
     train_end, val_end = split_dates(panel.index)
     X, y, meta = build_dataset(panel, horizon=args.horizon, groups=groups, train_end=train_end,
                                neighbor_method=neighbor_method)

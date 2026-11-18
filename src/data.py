@@ -118,7 +118,8 @@ def load_pems04(n_sensors: int | None = None, fault_min_run: int | None = 12, ag
 # ----------------------------------------------------------------------------- Madrid (primary)
 # Layout of the Mendeley download (from a public project that inspected the complete version):
 #   Enriched Traffic Datasets for Madrid/<Complete dataset | subset folder>/<config hash>/
-#       MTD_<...>_data.csv            long format, one row per sensor x 15-minute timestamp
+#       MTD_complete_data.csv         long format, one row per sensor x timestamp (the subset is hourly;
+#                                     MTD_training.csv + MTD_target_month.csv are the same rows split in two)
 #       MTD_id_longitude_latitude.csv sensor id, longitude, latitude (same order as the adjacency)
 #       MTD_adj_matrix.npy            weighted, symmetric adjacency (similarity decreasing with distance)
 #       configuration.txt
@@ -200,7 +201,10 @@ def build_madrid_panel(parquet_path: Path | None = None, out_path: Path | None =
     df = pd.read_parquet(parquet_path)
     df["date"] = pd.to_datetime(df["date"])
     df = df.drop_duplicates(["id", "date"], keep="first")
-    index = pd.date_range(df["date"].min(), df["date"].max(), freq="15min")
+    times = pd.DatetimeIndex(np.sort(df["date"].unique()))
+    step = pd.Series(times).diff().mode().iloc[0]           # 15 min or 1 h, detected from the data
+    step_min = int(step / pd.Timedelta("1min"))
+    index = pd.date_range(times[0], times[-1], freq=f"{step_min}min")
     sensors = np.sort(df["id"].unique())
     wide = df.pivot(index="date", columns="id", values="traffic_intensity").reindex(index=index, columns=sensors)
     flow = np.array(wide.to_numpy(dtype=np.float32), copy=True)
@@ -215,7 +219,8 @@ def build_madrid_panel(parquet_path: Path | None = None, out_path: Path | None =
     out_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(out_path, flow=flow, index=index.strftime("%Y-%m-%d %H:%M").to_numpy().astype("U16"),
                         sensors=sensors, weather=weather.to_numpy(dtype=np.float32),
-                        weather_cols=np.array(wx_cols), holidays=np.array(hol, dtype="U10"))
+                        weather_cols=np.array(wx_cols), holidays=np.array(hol, dtype="U10"),
+                        step_min=np.array(step_min))
     return out_path
 
 
@@ -261,7 +266,8 @@ def load_madrid(n_sensors: int | None = 60, fault_min_run: int | None = 12) -> P
     rename = {"temperature": "temp", "precipitation": "precip", "wind": "wind"}
     weather = pd.DataFrame(z["weather"], index=index, columns=[rename.get(c, c) for c in z["weather_cols"]])
     holidays = pd.to_datetime(z["holidays"]) if len(z["holidays"]) else None
-    return Panel(flow.astype(np.float32), index, sensors, 15, weather=weather, holidays=holidays,
+    step_min = int(z["step_min"]) if "step_min" in z.files else 15
+    return Panel(flow.astype(np.float32), index, sensors, step_min, weather=weather, holidays=holidays,
                  static=_madrid_static(sensors), unit=MADRID_UNIT)
 
 
@@ -286,6 +292,6 @@ if __name__ == "__main__":
         inspect_pems()
     else:
         p = load_madrid(n_sensors=None, fault_min_run=None)
-        print(f"Madrid panel ready: {p.flow.shape[0]:,} steps x {p.flow.shape[1]} sensors, "
+        print(f"Madrid panel ready: {p.flow.shape[0]:,} steps of {p.step_min} min x {p.flow.shape[1]} sensors, "
               f"{p.index[0]} to {p.index[-1]}, unit {p.unit}, holidays {0 if p.holidays is None else len(p.holidays)}")
         print(f"Share this small file with the team: {MADRID_PANEL} ({MADRID_PANEL.stat().st_size / 1e6:.0f} MB)")

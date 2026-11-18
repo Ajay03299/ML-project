@@ -8,8 +8,8 @@ leakage prevention and split design in the report, and assembling the final PDF.
 
 ```bash
 # 1. put the starter in the repo
-git clone https://github.com/<you>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/Ajay03299/ML-project.git
+cd ML-project
 #    copy the CONTENTS of the starter folder here, then:
 python -m venv .venv
 .venv\Scripts\activate             # Windows   (Mac/Linux: source .venv/bin/activate)
