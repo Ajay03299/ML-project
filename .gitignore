@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Saved models are large (a random forest can be 100+ MB); regenerate with src/train_baseline.py
+models/*.joblib
+models/*.pkl
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Secrets
+.env
+
+# Raw data (large). Download steps are in README.md
+data/raw/*
+!data/raw/.gitkeep
+data/processed/
+
+# Generated per machine. Anirudh runs the final benchmark; share it on Drive, not in git
+results/benchmark.csv
+results/scaling.csv
+models/meta.json
