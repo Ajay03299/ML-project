@@ -11,8 +11,8 @@ results table, README. Plus your report sections.
 3. In the VS Code terminal:
 
 ```bash
-git clone https://github.com/<ajay-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/Ajay03299/ML-project.git
+cd ML-project
 python -m venv .venv
 .venv\Scripts\activate             # Windows   (Mac/Linux: source .venv/bin/activate)
 pip install -r requirements.txt

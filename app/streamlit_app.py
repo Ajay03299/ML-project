@@ -43,7 +43,7 @@ def load_everything(source, n_sensors, horizon):
 
 panel, X, y, meta, models = load_everything(info["source"], info["n_sensors"], info["horizon"])
 step = info["step_min"]
-horizon_min = info["horizon"] * step
+horizon_min = info["horizon"] * step   # minutes ahead
 
 tab_fc, tab_board = st.tabs(["Forecast", "Model leaderboard"])
 
