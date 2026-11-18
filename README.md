@@ -98,23 +98,3 @@ Figures go to `results/figures/`, tables to `results/`.
 
 Hyper-parameters are chosen on the validation period only; the test period is used once, for the final table.
 
-## Who does what
-
-| Person | ML models | Analysis | Other ownership | Reviewer |
-|---|---|---|---|---|
-| **Ajay** | Baselines (persistence, seasonal, historical average, Ridge), **Decision Tree** | Sensor-holdout test | Data gate, loading and cleaning, EDA, features, split, report assembly | Pragun |
-| **Pragun** | **Random Forest**, **PCA** (explained variance, loadings, PCA before models) | **A** Feature analysis and ablation | RF, PCA and ablation report sections; viva slides | Bhavesh |
-| **Bhavesh** | **AdaBoost**, **Gradient Boosting**, **HistGradientBoosting** | **C** Model efficiency | Streamlit UI; report sections: these boosters, efficiency, UI | Anirudh |
-| **Anirudh** | **XGBoost**, **LightGBM** | **E** Error analysis | Evaluation code, model saving and serving, final benchmark table, README and repo hygiene | Ajay |
-
-Review rotation: Ajay reviews Pragun, Pragun reviews Bhavesh, Bhavesh reviews Anirudh, Anirudh reviews Ajay.
-Each person's brief, with commands and deadlines: `docs/tasks/<NAME>.md`. Git workflow: `CONTRIBUTING.md`.
-
-## Milestones
-
-Models freeze **Tue 24 Nov**, viva swap session **Fri 27 Nov**, code freeze and tag `v1.0-submission` **Sat 28 Nov**,
-submit by **Mon 30 Nov (EOD)**. Viva 1-6 Dec.
-
-## Limitations and results
-
-To be filled in after the real run (results table, analyses A, C, E, caveats such as the seasonal shift between train and test).
