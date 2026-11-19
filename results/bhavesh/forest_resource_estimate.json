@@ -1,0 +1,5 @@
+{
+  "single_tree_nodes": 249179,
+  "estimated_200tree_MiB": 3421.9528198242188,
+  "note": "training-only resource pilot; no validation or test scores used"
+}

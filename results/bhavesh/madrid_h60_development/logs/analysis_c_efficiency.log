@@ -1,0 +1,51 @@
+Command: C:\Users\Admin\Desktop\ML project\traffic-volume-prediction\.venv\Scripts\python.exe -u -m experiments.analysis_c_efficiency --source madrid --horizon-min 60 --n-sensors 60 --max-train-rows 200000 --repeats 1 --reuse-benchmark-fit --latency-repeats 30 --threads 2
+C:\Users\Admin\Desktop\ML project\traffic-volume-prediction-real\src\data.py:276: UserWarning: Legacy Madrid cache: excluding weather because backward-fill provenance is unverified. Traffic, calendar and static road features remain available. Rebuild from raw CSV/Parquet to include causal weather.
+  warnings.warn("Legacy Madrid cache: excluding weather because backward-fill provenance is "
+[data] madrid: 60 sensors, unit veh/h, horizon 60 min | train 200,000  val 106,160  test 105,765 | 29 features
+[efficiency] Persistence: 0.162 ms single, fit 0.000s
+[efficiency] SeasonalNaive_day: 0.224 ms single, fit 0.000s
+[efficiency] SeasonalNaive_week: 0.209 ms single, fit 0.000s
+[efficiency] HistoricalAverage: 4.111 ms single, fit 0.027s
+[efficiency] Ridge: 3.384 ms single, fit 0.126s
+[efficiency] DecisionTree: 2.855 ms single, fit 4.833s
+[efficiency] RandomForest: 101.580 ms single, fit 419.937s
+[efficiency] PCA_Ridge: 3.618 ms single, fit 0.192s
+[efficiency] PCA_RandomForest: 55.095 ms single, fit 1045.875s
+[efficiency] AdaBoost: 47.260 ms single, fit 2934.603s
+[efficiency] GradientBoosting: 3.479 ms single, fit 1175.913s
+[efficiency] HistGradientBoosting: 21.748 ms single, fit 37.850s
+[efficiency] XGBoost: 10.262 ms single, fit 37.068s
+[efficiency] LightGBM: 3.206 ms single, fit 18.759s
+[scaling] Ridge: rows=12500, repeat=1, val MAE=56.386
+[scaling] DecisionTree: rows=12500, repeat=1, val MAE=59.262
+[scaling] RandomForest: rows=12500, repeat=1, val MAE=43.427
+[scaling] AdaBoost: rows=12500, repeat=1, val MAE=44.878
+[scaling] GradientBoosting: rows=12500, repeat=1, val MAE=45.072
+[scaling] HistGradientBoosting: rows=12500, repeat=1, val MAE=44.152
+[scaling] XGBoost: rows=12500, repeat=1, val MAE=44.524
+[scaling] LightGBM: rows=12500, repeat=1, val MAE=44.483
+[scaling] Ridge: rows=25000, repeat=1, val MAE=55.918
+[scaling] DecisionTree: rows=25000, repeat=1, val MAE=55.016
+[scaling] RandomForest: rows=25000, repeat=1, val MAE=41.432
+[scaling] AdaBoost: rows=25000, repeat=1, val MAE=44.251
+[scaling] GradientBoosting: rows=25000, repeat=1, val MAE=42.816
+[scaling] HistGradientBoosting: rows=25000, repeat=1, val MAE=40.983
+[scaling] XGBoost: rows=25000, repeat=1, val MAE=41.724
+[scaling] LightGBM: rows=25000, repeat=1, val MAE=41.183
+[scaling] Ridge: rows=50000, repeat=1, val MAE=55.922
+[scaling] DecisionTree: rows=50000, repeat=1, val MAE=51.629
+[scaling] RandomForest: rows=50000, repeat=1, val MAE=39.773
+[scaling] AdaBoost: rows=50000, repeat=1, val MAE=43.881
+[scaling] GradientBoosting: rows=50000, repeat=1, val MAE=41.330
+[scaling] HistGradientBoosting: rows=50000, repeat=1, val MAE=39.512
+[scaling] XGBoost: rows=50000, repeat=1, val MAE=39.290
+[scaling] LightGBM: rows=50000, repeat=1, val MAE=39.163
+[scaling] Ridge: rows=100000, repeat=1, val MAE=55.985
+[scaling] DecisionTree: rows=100000, repeat=1, val MAE=48.879
+[scaling] RandomForest: rows=100000, repeat=1, val MAE=38.374
+[scaling] AdaBoost: rows=100000, repeat=1, val MAE=43.917
+[scaling] GradientBoosting: rows=100000, repeat=1, val MAE=40.860
+[scaling] HistGradientBoosting: rows=100000, repeat=1, val MAE=38.720
+[scaling] XGBoost: rows=100000, repeat=1, val MAE=37.469
+[scaling] LightGBM: rows=100000, repeat=1, val MAE=38.085
+Artifacts: C:\Users\Admin\Desktop\ML project\traffic-volume-prediction-real\results\bhavesh\madrid_h60_development

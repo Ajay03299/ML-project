@@ -1,0 +1,33 @@
+Command: C:\Users\Admin\Desktop\ML project\traffic-volume-prediction\.venv\Scripts\python.exe -u -m experiments.bhavesh_final_benchmark --source madrid --horizon-min 60 --n-sensors 60 --max-train-rows 200000 --threads 2
+C:\Users\Admin\Desktop\ML project\traffic-volume-prediction-real\src\data.py:276: UserWarning: Legacy Madrid cache: excluding weather because backward-fill provenance is unverified. Traffic, calendar and static road features remain available. Rebuild from raw CSV/Parquet to include causal weather.
+  warnings.warn("Legacy Madrid cache: excluding weather because backward-fill provenance is "
+[data] madrid: 60 sensors, unit veh/h, horizon 60 min | train 200,000  val 106,160  test 105,765 | 29 features
+[frozen benchmark] Persistence
+[result] Persistence            tag=all            val MAE 102.32 | test MAE 109.95 RMSE 185.26 R2 0.892 WAPE 0.180
+[frozen benchmark] SeasonalNaive_day
+[result] SeasonalNaive_day      tag=all            val MAE 107.03 | test MAE 117.23 RMSE 234.56 R2 0.827 WAPE 0.192
+[frozen benchmark] SeasonalNaive_week
+[result] SeasonalNaive_week     tag=all            val MAE 56.48 | test MAE 75.37 RMSE 146.11 R2 0.933 WAPE 0.123
+[frozen benchmark] HistoricalAverage
+[result] HistoricalAverage      tag=all            val MAE 95.79 | test MAE 105.34 RMSE 179.00 R2 0.899 WAPE 0.172
+[frozen benchmark] Ridge
+[result] Ridge                  tag=all            val MAE 56.07 | test MAE 65.02 RMSE 106.52 R2 0.964 WAPE 0.106
+[frozen benchmark] DecisionTree
+[result] DecisionTree           tag=all            val MAE 46.86 | test MAE 53.21 RMSE 93.83 R2 0.972 WAPE 0.087
+[frozen benchmark] RandomForest
+[result] RandomForest           tag=all            val MAE 36.97 | test MAE 41.07 RMSE 74.56 R2 0.982 WAPE 0.067
+[frozen benchmark] PCA_Ridge
+[result] PCA_Ridge              tag=all            val MAE 56.99 | test MAE 68.11 RMSE 113.03 R2 0.960 WAPE 0.111
+[frozen benchmark] PCA_RandomForest
+[result] PCA_RandomForest       tag=all            val MAE 44.87 | test MAE 47.67 RMSE 84.07 R2 0.978 WAPE 0.078
+[frozen benchmark] AdaBoost
+[result] AdaBoost               tag=all            val MAE 44.29 | test MAE 51.40 RMSE 88.16 R2 0.976 WAPE 0.084
+[frozen benchmark] GradientBoosting
+[result] GradientBoosting       tag=all            val MAE 40.27 | test MAE 44.69 RMSE 77.38 R2 0.981 WAPE 0.073
+[frozen benchmark] HistGradientBoosting
+[result] HistGradientBoosting   tag=all            val MAE 38.30 | test MAE 42.52 RMSE 74.96 R2 0.982 WAPE 0.070
+[frozen benchmark] XGBoost
+[result] XGBoost                tag=all            val MAE 36.02 | test MAE 39.99 RMSE 72.93 R2 0.983 WAPE 0.065
+[frozen benchmark] LightGBM
+[result] LightGBM               tag=all            val MAE 37.38 | test MAE 41.45 RMSE 73.48 R2 0.983 WAPE 0.068
+Frozen benchmark complete: C:\Users\Admin\Desktop\ML project\traffic-volume-prediction-real\results\bhavesh\madrid_h60_development

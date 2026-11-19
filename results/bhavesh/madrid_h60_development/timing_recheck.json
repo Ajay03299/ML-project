@@ -1,0 +1,28 @@
+{
+  "model": "GradientBoosting",
+  "n_train": 25000,
+  "run_id": "a8d53e5b4f04b224e5c554d45e72435cc84b153695ea5b6512c95d63dab03740",
+  "reason": "Windows system sleep contaminated the original wall-clock fit time",
+  "original_observation": {
+    "model": "GradientBoosting",
+    "n_train": 25000,
+    "repeat": 0,
+    "train_time_s": 1287.874068300007,
+    "val_MAE": 42.81647738688555,
+    "evaluation_source": "fresh_validation_fit"
+  },
+  "repeat_wall_s": 74.88625380001031,
+  "repeat_process_cpu_s": 74.515625,
+  "repeat_val_MAE": 42.81647738688555,
+  "same_validation_score": true,
+  "parameter_file_sha256": "3e15d2bd3892214f8a1d2c28a385cdd6e878b05d534bbb678fe6addd482d286e",
+  "system_resume_events": [
+    {
+      "TimeCreated": "2026-11-19T02:04:34.8215784+05:30",
+      "Id": 1,
+      "Message": "The system has returned from a low power state.\r\n\r\nSleep Time: \u200e2026\u200e-\u200e11\u200e-\u200e18T20:14:43.986421200Z\r\nWake Time: \u200e2026\u200e-\u200e11\u200e-\u200e18T20:34:30.903759900Z\r\n\r\nWake Source: Power Button"
+    }
+  ],
+  "test_used": false,
+  "automatic_sleep_inhibition": "current timed process only; previous state restored"
+}

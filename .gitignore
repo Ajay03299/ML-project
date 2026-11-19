@@ -30,3 +30,19 @@ data/processed/
 results/benchmark.csv
 results/scaling.csv
 models/meta.json
+
+# Partial long-run checkpoints; final tables and logs are retained.
+results/bhavesh/**/efficiency_progress.csv
+results/bhavesh/**/scaling_progress.csv
+output/demo/raw/
+output/demo/*_Raw.webm
+
+# Local notes and reports, deferred from the current PR.
+docs/BHAVESH_HANDOFF.md
+docs/BHAVESH_REAL_RUN_PROTOCOL.md
+docs/BHAVESH_REPORT_SECTIONS.md
+docs/BHAVESH_VIVA.md
+docs/TEAM_REVIEW_NOTES.md
+docs/VERIFICATION.md
+output/pdf/Bhavesh_RealData_Report.pdf
+output/pdf/Bhavesh_RealData_Evidence.pdf

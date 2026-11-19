@@ -1,0 +1,92 @@
+{
+  "status": "pass",
+  "verified_at": "2026-11-19T02:58:18.730392+05:30",
+  "run_id": "a8d53e5b4f04b224e5c554d45e72435cc84b153695ea5b6512c95d63dab03740",
+  "dataset_unchanged": true,
+  "parameter_files": 10,
+  "pipeline_files": 3,
+  "model_files": [
+    {
+      "model": "Persistence",
+      "bytes": 75,
+      "sha256": "913c816512c9735b80c0dafec011065040a99cc039ceb586e2c58201ad613bad"
+    },
+    {
+      "model": "SeasonalNaive_day",
+      "bytes": 80,
+      "sha256": "2818ef3e51f9cce6a2368daf800e6a342733d64a8ad585b829dd50e09f9f5e21"
+    },
+    {
+      "model": "SeasonalNaive_week",
+      "bytes": 79,
+      "sha256": "b032a015212f15ee9ec982fc06c6d3431d6ec6565c90cc8733137c57261b8356"
+    },
+    {
+      "model": "HistoricalAverage",
+      "bytes": 42707,
+      "sha256": "f4bd0ffc638f52623ef1ea0d3faaf9af2f21a8f13425d649b972739cfb56cae3"
+    },
+    {
+      "model": "Ridge",
+      "bytes": 2481,
+      "sha256": "7a433c159fdc3ab590a8fa967325fa92231518998a70d43a44668881c27a4901"
+    },
+    {
+      "model": "DecisionTree",
+      "bytes": 443201,
+      "sha256": "b4f6b1225b88f4a6d18e57a466733d80a968a08728ec3dbae844f1ee3e587b50"
+    },
+    {
+      "model": "RandomForest",
+      "bytes": 3593909633,
+      "sha256": "ee830835e563fca6e718ca3179319a80f7affe3677b0bc21cd8713ff8ffb529a"
+    },
+    {
+      "model": "PCA_Ridge",
+      "bytes": 6053,
+      "sha256": "dad7f74417040a6cbc15d6db006735cb0395cf13201a717cc05de9f36f66c6b9"
+    },
+    {
+      "model": "PCA_RandomForest",
+      "bytes": 134999194,
+      "sha256": "c2d0ee949ec8210adf07c8a59549bea7193a43ee915c1cf0ae93eb7c3ecea03b"
+    },
+    {
+      "model": "AdaBoost",
+      "bytes": 25118448,
+      "sha256": "454a6ae9ad97fc6490c96bf57fd2d229af8f9c1da708f21b5fd9cc0fd80a451d"
+    },
+    {
+      "model": "GradientBoosting",
+      "bytes": 1231674,
+      "sha256": "9ca1306b17cefeef591f8360949acb01e0d4d9018f8d3450dc19747b8c7f32e1"
+    },
+    {
+      "model": "HistGradientBoosting",
+      "bytes": 4358118,
+      "sha256": "0a3f52b7bd2ebd33b7bc922eb930eb0679241c3730378bc82c16613920a0d3d0"
+    },
+    {
+      "model": "XGBoost",
+      "bytes": 8879809,
+      "sha256": "80c50fc341e2304ceae6ac25375013f50d0e09a299c86c64ac3e1a835db43600"
+    },
+    {
+      "model": "LightGBM",
+      "bytes": 4433210,
+      "sha256": "0dff394b34952d6a9c4bbdfec82d05691f89092e4274711ea5835df38578ad46"
+    }
+  ],
+  "benchmark_models": 14,
+  "efficiency_models": 14,
+  "latency_repetitions_each": 30,
+  "primary_scaling_points": 40,
+  "raw_scaling_evaluations": 32,
+  "documented_timing_rechecks": 1,
+  "test_labels_in_scaling": false,
+  "browser_checked_predictions": 96,
+  "pdf_pages": {
+    "Bhavesh_RealData_Report": 2,
+    "Bhavesh_RealData_Evidence": 9
+  }
+}

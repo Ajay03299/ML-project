@@ -88,3 +88,29 @@ def test_hourly_download_is_detected(tmp_path, monkeypatch):
     X, y, meta = build_dataset(p, horizon=1)                       # 1 step = 60 minutes
     assert (meta["target_time"] - meta["origin_time"] == pd.Timedelta("60min")).all()
     assert "flow_yesterday" in X and len(X) > 500 and not X.isna().any().any()
+
+
+def test_weather_gaps_do_not_read_a_future_observation(tmp_path):
+    index = pd.date_range("2022-06-01", periods=14, freq="15min")
+    weather = [np.nan] * 10 + [25.0] * 4
+    frame = pd.DataFrame({"id": 1, "date": index, "traffic_intensity": 100.0,
+                          "temperature": weather})
+    parquet = tmp_path / "input.parquet"
+    output = tmp_path / "panel.npz"
+    frame.to_parquet(parquet)
+    data_mod.build_madrid_panel(parquet, output)
+    with np.load(output) as panel:
+        assert np.isnan(panel["weather"][:10, 0]).all()
+        assert panel["weather"][10, 0] == 25.0
+
+
+def test_old_cached_panel_cannot_silently_reuse_backward_filled_weather(tmp_path, monkeypatch):
+    old = tmp_path / "old_panel.npz"
+    np.savez_compressed(old, flow=np.ones((20, 2)), sensors=[1, 2],
+                        index=pd.date_range("2022-01-01", periods=20, freq="1h").astype(str).to_numpy(dtype="U19"),
+                        weather=np.ones((20, 1)), weather_cols=["temperature"], holidays=[], step_min=60)
+    monkeypatch.setattr(data_mod, "MADRID_PANEL", old)
+    with pytest.warns(UserWarning, match="excluding weather"):
+        panel = data_mod.load_madrid()
+    assert panel.weather is None and panel.step_min == 60
+    np.testing.assert_allclose(panel.flow, 1)
