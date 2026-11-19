@@ -2,18 +2,16 @@
 
 Team: **Ajay, Pragun, Bhavesh, Anirudh**
 
-Bhavesh's implementation, verification and real-data handoff are documented in
-[docs/BHAVESH_HANDOFF.md](docs/BHAVESH_HANDOFF.md), with an implementation-specific
-[viva guide](docs/BHAVESH_VIVA.md). His boosting script now tunes on validation
-only; run the final benchmark separately. Synthetic/quick tuning is isolated
+The boosting search tunes on validation only; run the final benchmark separately.
+Synthetic/quick tuning is isolated
 from the team's canonical best-parameter files. Causal weather preprocessing
 uses forward fill only. Legacy shared panels retain traffic/calendar/road data
-but exclude unverified weather; see [the real-run protocol](docs/BHAVESH_REAL_RUN_PROTOCOL.md).
+but exclude weather whose past-only filling cannot be verified from the shared cache.
 
 The frozen 60-sensor, one-hour run gives HistGB test MAE **42.52 veh/h**, a
 **34.6%** reduction over the validation-selected Ridge baseline. XGBoost is the
-overall MAE leader at **39.99**. See the [measured report](output/pdf/Bhavesh_RealData_Report.pdf)
-and [evidence](output/pdf/Bhavesh_RealData_Evidence.pdf) for all models, serving
+overall MAE leader at **39.99**. See the [frozen benchmark](results/bhavesh/madrid_h60_development/frozen_benchmark.csv)
+and [efficiency results](results/bhavesh/madrid_h60_development/efficiency.csv) for all models, serving
 costs, consistency checks and limitations. One sleep-contaminated scaling time
 was repeated with its original observation retained in the timing audit.
 
@@ -26,7 +24,7 @@ next to recent traffic.
 
 At origin time `t` (the last observed hourly reading in the merged panel), predict the flow of one sensor at `t + h`.
 Regression. Metrics: MAE, RMSE, R2 and WAPE (plain MAPE is avoided: night-time flows are near zero).
-Flow unit: vehicles per hour as reported by the Madrid portal; the original dictionary and archive limitations are linked in [the real-run protocol](docs/BHAVESH_REAL_RUN_PROTOCOL.md).
+Flow unit: vehicles per hour as reported by the Madrid portal; see [data attribution](DATA_ATTRIBUTION.md) for the original source.
 
 ## Dataset
 
@@ -115,5 +113,5 @@ Figures go to `results/figures/`, tables to `results/`.
 Hyper-parameters are chosen on the validation period only; the test period is used after the configuration freeze.
 The legacy weather array is excluded because fill provenance is unavailable.
 The inherited long-zero-run cleanup is retrospective archival quality screening,
-not a validated online fault detector. See the real-run protocol for its scope.
+not a validated online fault detector. Its scope is recorded in the [data audit](results/bhavesh/madrid_data_audit.json).
 
