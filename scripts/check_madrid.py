@@ -82,7 +82,8 @@ def main(argv=None) -> int:
     sensors = len(per_sensor)
     first = sample_first[sample_first["id"] == sample_first["id"].iloc[0]].sort_values("date")
     step = pd.to_datetime(first["date"]).diff().dropna().value_counts().head(3)
-    expected = int((pd.Timestamp(dmax) - pd.Timestamp(dmin)) / pd.Timedelta("15min")) + 1
+    step_td = step.index[0] if len(step) else pd.Timedelta("15min")
+    expected = int((pd.Timestamp(dmax) - pd.Timestamp(dmin)) / step_td) + 1
     counts = np.array(list(per_sensor.values()))
     coverage = counts / expected
 
@@ -90,7 +91,7 @@ def main(argv=None) -> int:
             f"- rows: **{n:,}**; sensors: **{sensors}**; range **{dmin} to {dmax}** "
             f"({(pd.Timestamp(dmax) - pd.Timestamp(dmin)).days / 30.4:.1f} months)",
             f"- step for one sensor (most common): {dict((str(k), int(c)) for k, c in step.items())}",
-            f"- expected 15-min slots per sensor: {expected:,}; coverage per sensor: min {coverage.min():.1%}, "
+            f"- expected slots per sensor at that step: {expected:,}; coverage per sensor: min {coverage.min():.1%}, "
             f"median {np.median(coverage):.1%}, max {coverage.max():.1%} (above 100% means duplicate timestamps)",
             f"- sensors with < 80% coverage: {(coverage < 0.8).sum()}\n",
             "## traffic_intensity\n",
@@ -115,10 +116,11 @@ def main(argv=None) -> int:
                 f"non-zero share {(A != 0).mean():.3f}"]
 
     checks = [
-        ("15-minute step", "0 days 00:15:00" in [str(k) for k in step.index[:1]]),
+        ("regular step of 15 or 60 minutes", str(step.index[0]) in ("0 days 00:15:00", "0 days 01:00:00")),
         ("at least 100 sensors", sensors >= 100),
         ("at least 6 months", (pd.Timestamp(dmax) - pd.Timestamp(dmin)).days >= 180),
-        ("intensity looks raw (median > 10, mostly integers)", np.median(v) > 10 and (v == np.round(v)).mean() > 0.95),
+        ("intensity looks like raw counts, not standardised (median > 10, no large negatives)",
+         np.median(v) > 10 and np.percentile(v, 1) >= -1),
         ("missing or negative < 10%", (nulls + neg) / n < 0.10),
         ("weather columns present", {"temperature", "precipitation", "wind"} <= set(use)),
         ("calendar label present", "day_type" in use),

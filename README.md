@@ -20,7 +20,7 @@ Mendeley Data, V4, DOI 10.17632/697ht4f65b.4, licence CC BY 4.0: https://data.me
 Original traffic source: Madrid Open Data Portal. Related article: Gómez and Ilarri, IEEE Open Journal of
 Intelligent Transportation Systems, 2025, DOI 10.1109/OJITS.2025.3637305. Cite all three in the report.
 
-- Subset: 300 sensors, June 2022 to October 2023, 15-minute readings (the complete version has 554 sensors, 30 months)
+- Subset: 300 sensors, June 2022 to October 2023, hourly readings (the complete version has 554 sensors, 30 months). Use the files inside the extracted `.rar` folder (300-sensor adjacency); ignore `temporal_sequences/` (pre-scaled deep-learning windows)
 - One long CSV (`id, date, traffic_intensity, day_type, wind, temperature, precipitation`, plus road attributes:
   lanes, highway class, maxspeed, oneway, length, coordinates), a coordinates CSV and an adjacency matrix (`.npy`)
 - Flow unit: `traffic_intensity` as in the Madrid portal (vehicles per hour, reported every 15 minutes);
