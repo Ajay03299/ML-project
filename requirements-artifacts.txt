@@ -1,0 +1,4 @@
+# Optional report rendering and browser evidence; not required for model training.
+reportlab>=4.0
+PyMuPDF>=1.23
+playwright>=1.40

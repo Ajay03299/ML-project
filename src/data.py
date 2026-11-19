@@ -15,6 +15,7 @@ Loaders:
 from __future__ import annotations
 
 import os
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -133,6 +134,7 @@ MADRID_PARQUET = PROCESSED_DIR / "madrid_15min.parquet"
 MADRID_SENSORS = PROCESSED_DIR / "madrid_sensors.csv"
 MADRID_PANEL = PROCESSED_DIR / "madrid_panel.npz"     # small file the team shares (Google Drive)
 MADRID_UNIT = "veh/h"   # MTD traffic_intensity, as in the Madrid portal's `intensidad`. Confirm in the gate.
+MADRID_PANEL_VERSION = 2  # v2: weather is never filled backward from a future reading
 
 DYNAMIC_COLS = ["id", "date", "traffic_intensity", "day_type", "wind", "temperature", "precipitation"]
 STATIC_COLS = ["id", "longitude", "latitude", "oneway", "lanes", "highway", "maxspeed", "length"]
@@ -211,13 +213,16 @@ def build_madrid_panel(parquet_path: Path | None = None, out_path: Path | None =
     flow[flow < 0] = np.nan                          # the portal uses negative values for "no data"
     wx_cols = [c for c in ("temperature", "precipitation", "wind") if c in df.columns]
     weather = df.groupby("date")[wx_cols].median().reindex(index)   # city-level: one value per timestamp
-    weather = weather.ffill(limit=8).bfill(limit=8)
+    # Only carry observations forward (at most two hours). Back-filling would
+    # expose a future weather reading at an earlier forecast origin.
+    weather = weather.ffill(limit=max(1, 120 // step_min))
     hol = []
     if "day_type" in df.columns:
         share = df.assign(h=df["day_type"].eq("Holiday")).groupby(df["date"].dt.normalize())["h"].mean()
         hol = share.index[share > 0.5].strftime("%Y-%m-%d").tolist()
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(out_path, flow=flow, index=index.strftime("%Y-%m-%d %H:%M").to_numpy().astype("U16"),
+    np.savez_compressed(out_path, preprocessing_version=MADRID_PANEL_VERSION,
+                        flow=flow, index=index.strftime("%Y-%m-%d %H:%M").to_numpy().astype("U16"),
                         sensors=sensors, weather=weather.to_numpy(dtype=np.float32),
                         weather_cols=np.array(wx_cols), holidays=np.array(hol, dtype="U10"),
                         step_min=np.array(step_min))
@@ -257,6 +262,8 @@ def load_madrid(n_sensors: int | None = 60, fault_min_run: int | None = 12) -> P
         print("Building data/processed/madrid_panel.npz (one time) ...")
         build_madrid_panel()
     z = np.load(MADRID_PANEL)
+    causal_weather = ("preprocessing_version" in z and
+                      int(z["preprocessing_version"]) == MADRID_PANEL_VERSION)
     flow, sensors = z["flow"], z["sensors"]
     keep = subset_sensors(len(sensors), n_sensors)
     flow, sensors = flow[:, keep], sensors[keep]
@@ -265,8 +272,14 @@ def load_madrid(n_sensors: int | None = 60, fault_min_run: int | None = 12) -> P
     index = pd.DatetimeIndex(pd.to_datetime(z["index"]))
     rename = {"temperature": "temp", "precipitation": "precip", "wind": "wind"}
     weather = pd.DataFrame(z["weather"], index=index, columns=[rename.get(c, c) for c in z["weather_cols"]])
+    if not causal_weather:
+        warnings.warn("Legacy Madrid cache: excluding weather because backward-fill provenance is "
+                      "unverified. Traffic, calendar and static road features remain available. "
+                      "Rebuild from raw CSV/Parquet to include causal weather.", UserWarning)
+        weather = None
     holidays = pd.to_datetime(z["holidays"]) if len(z["holidays"]) else None
     step_min = int(z["step_min"]) if "step_min" in z.files else 15
+    z.close()
     return Panel(flow.astype(np.float32), index, sensors, step_min, weather=weather, holidays=holidays,
                  static=_madrid_static(sensors), unit=MADRID_UNIT)
 

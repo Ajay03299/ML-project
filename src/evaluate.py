@@ -6,7 +6,7 @@ analysis (C) and the UI leaderboard.
 """
 from __future__ import annotations
 
-import io
+import tempfile
 import time
 from pathlib import Path
 
@@ -59,9 +59,11 @@ def evaluate_model(name, model, splits: dict, tag: str = "all", fit: bool = True
         if part == "test":
             row["predict_ms_per_1000"] = elapsed / max(len(X), 1) * 1_000_000
 
-    buf = io.BytesIO()
-    joblib.dump(model, buf)
-    row["model_size_kb"] = buf.tell() / 1024
+    # Disk-backed serialization avoids holding a second full copy of a large
+    # forest in RAM just to measure its uncompressed joblib size.
+    with tempfile.TemporaryFile() as buf:
+        joblib.dump(model, buf)
+        row["model_size_kb"] = buf.tell() / 1024
     row.update(extra or {})
 
     results_path = Path(results_path)

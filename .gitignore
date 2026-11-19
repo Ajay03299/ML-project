@@ -30,3 +30,9 @@ data/processed/
 results/benchmark.csv
 results/scaling.csv
 models/meta.json
+
+# Partial long-run checkpoints; final tables and logs are retained.
+results/bhavesh/**/efficiency_progress.csv
+results/bhavesh/**/scaling_progress.csv
+output/demo/raw/
+output/demo/*_Raw.webm

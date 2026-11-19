@@ -20,6 +20,7 @@ import pandas as pd  # noqa: E402
 from sklearn.model_selection import ParameterGrid, ParameterSampler  # noqa: E402
 
 from src import config  # noqa: E402
+from src.artifacts import experiment_info, file_hash  # noqa: E402
 from src.data import load_panel  # noqa: E402
 from src.evaluate import evaluate_model, regression_metrics  # noqa: E402
 from src.features import GROUPS, build_dataset  # noqa: E402
@@ -48,7 +49,13 @@ def get_data(args, groups=GROUPS, holdout: bool = False, neighbor_method: str = 
     """Panel plus the split dict that evaluate_model expects. Identical for everyone."""
     panel = load_panel(args.source, n_sensors=args.n_sensors)
     if args.horizon is None:
-        args.horizon = max(1, args.horizon_min // panel.step_min)
+        if args.horizon_min < panel.step_min or args.horizon_min % panel.step_min:
+            raise ValueError(f"A {args.horizon_min}-minute forecast cannot be evaluated on "
+                             f"{panel.step_min}-minute observations. Use an exact positive multiple "
+                             "of the observed interval; no interpolation of target labels is allowed.")
+        args.horizon = args.horizon_min // panel.step_min
+    if args.horizon <= 0:
+        raise ValueError("Forecast horizon must be positive.")
     train_end, val_end = split_dates(panel.index)
     X, y, meta = build_dataset(panel, horizon=args.horizon, groups=groups, train_end=train_end,
                                neighbor_method=neighbor_method)
@@ -77,12 +84,13 @@ def subsample(splits: dict, n: int, seed: int = config.RANDOM_STATE):
 
 
 def tune(name: str, grid: dict, splits: dict, tune_rows: int, n_iter: int | None = None,
-         build=None, quick: bool = False) -> tuple[dict, pd.DataFrame]:
+         build=None, quick: bool = False, *, out_dir: Path | None = None) -> tuple[dict, pd.DataFrame]:
     """Time-ordered validation: fit on (a sample of) the training period, score on the validation period.
 
     grid    dict of parameter -> list of values. All combinations, or n_iter random ones.
     build   function(params) -> unfitted model; default make_model(name, tuned=False, **params)
-    Writes results/tuning/<name>.csv and results/best_params/<name>.json, returns (best, table).
+    By default writes shared tuning/parameter files. out_dir isolates supporting
+    searches under out_dir/tuning and out_dir/best_params; existing calls are unchanged.
     Never looks at the test period.
     """
     build = build or (lambda p: make_model(name, tuned=False, **p))
@@ -103,10 +111,16 @@ def tune(name: str, grid: dict, splits: dict, tune_rows: int, n_iter: int | None
                      "train_MAE": m_tr["MAE"], "fit_s": fit_s})
         print(f"  [{name} {i}/{len(combos)}] {p} -> val MAE {m_val['MAE']:.2f} (train {m_tr['MAE']:.2f}, {fit_s:.1f}s)")
     table = pd.DataFrame(rows).sort_values("val_MAE").reset_index(drop=True)
-    TUNE_DIR.mkdir(parents=True, exist_ok=True)
-    table.to_csv(TUNE_DIR / f"{name}.csv", index=False)
     best = {k: _py(v) for k, v in combos[int(table.iloc[0]["combo"])].items()}   # exact original types
-    save_best_params(name, best)
+    tune_dir = TUNE_DIR if out_dir is None else Path(out_dir) / "tuning"
+    tune_dir.mkdir(parents=True, exist_ok=True)
+    table.to_csv(tune_dir / f"{name}.csv", index=False)
+    if out_dir is None:
+        save_best_params(name, best)
+    else:
+        best_dir = Path(out_dir) / "best_params"
+        best_dir.mkdir(parents=True, exist_ok=True)
+        (best_dir / f"{name}.json").write_text(json.dumps(best, indent=2), encoding="utf-8")
     print(f"  best {name}: {best}  (val MAE {table.iloc[0]['val_MAE']:.2f})")
     return best, table
 
@@ -126,7 +140,9 @@ def finalize(name: str, splits: dict, panel, args, model=None, tag: str = "all",
     """Fit the tuned model on the full training sample, score it, record it, save it for the UI."""
     model = model if model is not None else make_model(name)
     row = evaluate_model(name, model, splits, tag=tag, owner=OWNERS.get(name, ""),
-                         horizon_min=horizon_min(args, panel))
+                         horizon_min=horizon_min(args, panel),
+                         extra={k: v for k, v in experiment_info(panel, splits, args).items()
+                                if k in ("run_id", "dataset_id", "source")})
     print(f"[result] {name:22s} tag={tag:14s} val MAE {row['val_MAE']:.2f} | test MAE {row['test_MAE']:.2f} "
           f"RMSE {row['test_RMSE']:.2f} R2 {row['test_R2']:.3f} WAPE {row['test_WAPE']:.3f}")
     if save and tag == "all":
@@ -137,19 +153,26 @@ def finalize(name: str, splits: dict, panel, args, model=None, tag: str = "all",
 def save_for_ui(name, model, splits, panel, args) -> None:
     """Only models trained on the main feature set go to models/, so the UI can load all of them."""
     MODELS_DIR.mkdir(exist_ok=True)
-    cols = list(splits["X_train"].columns)
-    info = {"columns": cols, "horizon": args.horizon, "n_sensors": args.n_sensors,
-            "source": args.source, "step_min": panel.step_min, "unit": panel.unit}
+    info = experiment_info(panel, splits, args)
+    model_runs = {}
     meta = MODELS_DIR / "meta.json"
     if meta.exists():
         old = json.loads(meta.read_text())
-        same = all(old.get(k) == info[k] for k in ("columns", "horizon", "n_sensors", "source"))
+        same = old.get("run_id") == info["run_id"]
+        if same:
+            model_runs = old.get("model_runs", {})
         if not same:
             print("  NOTE: models/ held models for a different setup; clearing it so the UI stays consistent")
             for f in MODELS_DIR.glob("*.joblib"):
                 f.unlink()
-    meta.write_text(json.dumps(info, indent=2))
-    joblib.dump(model, MODELS_DIR / f"{name}.joblib")
+    path = MODELS_DIR / f"{name}.joblib"
+    joblib.dump(model, path)
+    model_runs[name] = {"sha256": file_hash(path), "run_id": info["run_id"],
+                        "class": type(model).__name__,
+                        "params": {k: str(v) for k, v in model.get_params(deep=True).items()}
+                                  if hasattr(model, "get_params") else vars(model).get("column", "historical average")}
+    info["model_runs"] = model_runs
+    meta.write_text(json.dumps(info, indent=2), encoding="utf-8")
 
 
 def savefig(fig, name: str) -> Path:
