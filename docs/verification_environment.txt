@@ -1,0 +1,17 @@
+3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]
+Windows-11-10.0.26200-SP0
+numpy==2.3.5
+pandas==2.3.3
+scikit-learn==1.7.2
+scipy==1.16.3
+xgboost==3.4.1
+lightgbm==4.7.0
+joblib==1.5.2
+streamlit==1.51.0
+pyarrow==21.0.0
+matplotlib==3.10.6
+threadpoolctl==3.5.0
+pytest==8.4.2
+reportlab==5.0.1
+PyMuPDF==1.28.2
+playwright==1.60.0

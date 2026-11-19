@@ -1,0 +1,43 @@
+{
+  "before_history_missingness_filter": 735780,
+  "usable_rows": 698421,
+  "missing_target_rows": 6387,
+  "any_missing_feature_rows": 36287,
+  "feature_missing_counts": {
+    "flow_lag0": 6387,
+    "flow_lag1": 6387,
+    "flow_lag2": 6387,
+    "flow_lag3": 6387,
+    "flow_lag4": 6387,
+    "flow_lag8": 6387,
+    "flow_lag12": 6387,
+    "flow_yesterday": 6392,
+    "flow_lastweek": 6478,
+    "flow_mean4": 12601,
+    "flow_std4": 12601,
+    "flow_mean12": 27037,
+    "flow_std12": 27037,
+    "nb_flow_lag0": 86,
+    "nb_flow_lag4": 86
+  },
+  "split_candidates": {
+    "train": 511980,
+    "val": 111840,
+    "test": 111840
+  },
+  "split_usable": {
+    "train": 486400,
+    "val": 106160,
+    "test": 105765
+  },
+  "split_target_mean": {
+    "train": 635.6500244140625,
+    "val": 602.9061279296875,
+    "test": 610.9810791015625
+  },
+  "split_target_median": {
+    "train": 462.0,
+    "val": 436.25,
+    "test": 443.25
+  }
+}

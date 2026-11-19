@@ -1,0 +1,45 @@
+{
+  "upstream_commit": "358297a",
+  "panel_sha256": "2e438da6caa45da811e8e5c08dd509db5e1c5034eb9038f7381f0755b368daab",
+  "step_min": 60,
+  "start": "2022-06-01 00:00:00",
+  "end": "2023-10-31 23:00:00",
+  "n_timestamps": 12432,
+  "available_sensors": 300,
+  "experiment_sensors": 60,
+  "unit": "veh/h",
+  "weather_policy": "excluded: upstream cache lacks causal fill provenance; original raw file unavailable",
+  "missing_raw_panel": 30292,
+  "missing_after_fault_flag_all300": 30487,
+  "missing_selected60": 6522,
+  "fault_run_threshold_steps": 12,
+  "fault_run_threshold_hours": 12,
+  "unsupported_horizon_minutes": 15,
+  "supported_primary_horizon_minutes": 60,
+  "lags_hours": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    8,
+    12
+  ],
+  "rolling_windows_hours": [
+    4,
+    12
+  ],
+  "unit_primary_source": "https://datos.madrid.es/dataset/208627-0-transporte-ptomedida-historico/resource/208627-81-transporte-ptomedida-historico/download/208627-81-transporte-ptomedida-historico.pdf",
+  "unit_verified_against_original_document": true,
+  "zero_run_filter_added_missing_selected60": 27,
+  "zero_run_filter_changed_selected_sensors": {
+    "10801": 27
+  },
+  "selected_zero_run_interval": {
+    "start": "2022-08-07 13:00:00",
+    "end": "2022-08-08 15:00:00",
+    "before_train_boundary": true,
+    "train_end": "2023-05-29 13:00:00",
+    "val_end": "2023-08-15 06:00:00"
+  }
+}

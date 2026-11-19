@@ -1,0 +1,51 @@
+{
+  "status": "pass",
+  "run_id": "a8d53e5b4f04b224e5c554d45e72435cc84b153695ea5b6512c95d63dab03740",
+  "rows": 48,
+  "checked_predictions": 96,
+  "cases": [
+    {
+      "file": "madrid_export.csv",
+      "sensor": 3397,
+      "day": "2023-10-30",
+      "rows": 24,
+      "models": [
+        "HistGradientBoosting",
+        "GradientBoosting",
+        "AdaBoost"
+      ],
+      "checked_predictions": 72
+    },
+    {
+      "file": "madrid_export_changed_controls.csv",
+      "sensor": 3504,
+      "day": "2023-10-12",
+      "rows": 24,
+      "models": [
+        "HistGradientBoosting"
+      ],
+      "checked_predictions": 24
+    }
+  ],
+  "models": [
+    "HistGradientBoosting",
+    "GradientBoosting",
+    "AdaBoost"
+  ],
+  "sensor": 3504,
+  "target_day": "2023-10-12",
+  "horizon_min": 60,
+  "unit": "veh/h",
+  "checks": [
+    "model switching",
+    "sensor/date/time change matches displayed prediction",
+    "three-model chart",
+    "baseline toggle",
+    "real CSV download",
+    "direct prediction equality",
+    "actual/origin/target alignment",
+    "map and leaderboard tabs"
+  ],
+  "map_tiles": "inspect screenshots; external tile service is not guaranteed",
+  "video_recorded": false
+}
