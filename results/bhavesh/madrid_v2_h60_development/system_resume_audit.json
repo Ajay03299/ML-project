@@ -1,0 +1,56 @@
+[
+  {
+    "TimeCreated": "2026-11-20T13:24:26.6683948+05:30",
+    "Id": 42,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system is entering sleep.\r\n\r\nSleep Reason: System Idle"
+  },
+  {
+    "TimeCreated": "2026-11-20T13:24:27.6132729+05:30",
+    "Id": 107,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system has resumed from sleep."
+  },
+  {
+    "TimeCreated": "2026-11-20T13:24:49.5005314+05:30",
+    "Id": 1,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "The system time has changed to ‎2026‎-‎11‎-‎20T07:54:49.500000000Z from ‎2026‎-‎11‎-‎20T07:54:27.612953200Z.\r\nTime Delta: 21887 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: ‎2026‎-‎11‎-‎20T13:24:49.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+  },
+  {
+    "TimeCreated": "2026-11-20T14:04:26.4575073+05:30",
+    "Id": 42,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system is entering sleep.\r\n\r\nSleep Reason: Button or Lid"
+  },
+  {
+    "TimeCreated": "2026-11-20T14:04:27.361694+05:30",
+    "Id": 107,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system has resumed from sleep."
+  },
+  {
+    "TimeCreated": "2026-11-20T17:51:47.5006755+05:30",
+    "Id": 1,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "The system time has changed to ‎2026‎-‎11‎-‎20T12:21:47.500000000Z from ‎2026‎-‎11‎-‎20T08:34:27.361426900Z.\r\nTime Delta: 13640138 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: ‎2026‎-‎11‎-‎20T17:51:47.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+  },
+  {
+    "TimeCreated": "2026-11-20T17:52:49.9285355+05:30",
+    "Id": 42,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system is entering sleep.\r\n\r\nSleep Reason: Button or Lid"
+  },
+  {
+    "TimeCreated": "2026-11-20T17:52:50.7147075+05:30",
+    "Id": 107,
+    "ProviderName": "Microsoft-Windows-Kernel-Power",
+    "Message": "The system has resumed from sleep."
+  },
+  {
+    "TimeCreated": "2026-11-20T19:51:41.5006894+05:30",
+    "Id": 1,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "The system time has changed to ‎2026‎-‎11‎-‎20T14:21:41.500000000Z from ‎2026‎-‎11‎-‎20T12:22:50.714516900Z.\r\nTime Delta: 7130785 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: ‎2026‎-‎11‎-‎20T19:51:41.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+  }
+]

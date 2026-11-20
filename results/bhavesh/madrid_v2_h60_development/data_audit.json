@@ -154,5 +154,9 @@
     "Uses Ajay's merged v2 cache marker and leakage regression tests; raw source files are unavailable.",
     "Long-zero-run cleanup remains retrospective archival screening.",
     "Same historical test period as the earlier contribution; this is a rerun, not a new independent holdout."
-  ]
+  ],
+  "weather_npy_bytes_identical": {
+    "weather": true,
+    "weather_cols": true
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "run_id": "9adb1c2116ffbf69ac1e3fbc35f1e454b4d7d2d0df8ad5eff001396ccc98ff51",
+  "dataset_id": "c38b4434486605d1dd4f15e54952e10fbd042322cd8dba758363f6cb6273da8c",
+  "n_features": 32,
+  "benchmark_models": 8,
+  "scaling_points": 20,
+  "ui_cases": 6,
+  "test_metrics_unchanged_by_timing_repair": true,
+  "saved_model_hashes_match": true,
+  "parameter_and_input_hashes_match": true,
+  "all_manifests_match": true,
+  "raw_rebuild_verified": false
+}

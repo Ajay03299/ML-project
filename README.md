@@ -5,15 +5,19 @@ Team: **Ajay, Pragun, Bhavesh, Anirudh**
 The boosting search tunes on validation only; run the final benchmark separately.
 Synthetic/quick tuning is isolated
 from the team's canonical best-parameter files. Causal weather preprocessing
-uses forward fill only. Legacy shared panels retain traffic/calendar/road data
+uses forward fill only; the merged Madrid v2 cache enables weather features.
+Legacy shared panels retain traffic/calendar/road data
 but exclude weather whose past-only filling cannot be verified from the shared cache.
 
-The frozen 60-sensor, one-hour run gives HistGB test MAE **42.52 veh/h**, a
-**34.6%** reduction over the validation-selected Ridge baseline. XGBoost is the
-overall MAE leader at **39.99**. See the [frozen benchmark](results/bhavesh/madrid_h60_development/frozen_benchmark.csv)
-and [efficiency results](results/bhavesh/madrid_h60_development/efficiency.csv) for all models, serving
-costs, consistency checks and limitations. One sleep-contaminated scaling time
-was repeated with its original observation retained in the timing audit.
+The Madrid v2, 60-sensor, one-hour contributor comparison gives HistGB test MAE
+**43.04 veh/h**, a **33.9%** reduction over the validation-selected Ridge baseline
+(65.11). Classic GB scores **45.27** and AdaBoost **51.34**. This comparison covers
+the five baselines and Bhavesh's three boosters; Anirudh owns the complete team
+benchmark after the remaining model families' v2 tuning. See the
+[v2 benchmark](results/bhavesh/madrid_v2_h60_development/frozen_benchmark.csv) and
+[rerun methodology](results/bhavesh/madrid_v2_h60_development/README.md).
+The earlier no-weather comparison is retained in the
+[historical archive](results/bhavesh/madrid_h60_development/frozen_benchmark.csv).
 
 Forecast the traffic flow of a road sensor **60 minutes ahead** (one step in the merged hourly Madrid panel; 15-minute targets are unavailable) from past
 observations only, and compare Decision Tree, Random Forest, PCA-based models and five boosting variants (AdaBoost, Gradient Boosting, HistGradientBoosting, XGBoost, LightGBM)
@@ -126,7 +130,8 @@ Data/feature signatures, shared configuration and teammate parameter files are u
 | `tests/` | Includes a test that rewrites the future and checks earlier features do not change. **Keep it passing** |
 
 Hyper-parameters are chosen on the validation period only; the test period is used after the configuration freeze.
-The legacy weather array is excluded because fill provenance is unavailable.
+The v2 cache includes forecast-origin weather; legacy caches exclude weather
+because fill provenance is unavailable.
 The inherited long-zero-run cleanup is retrospective archival quality screening,
 not a validated online fault detector. Its scope is recorded in the [data audit](results/bhavesh/madrid_data_audit.json).
 
