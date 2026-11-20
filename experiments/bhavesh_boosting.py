@@ -15,7 +15,7 @@ import pandas as pd
 from sklearn.model_selection import ParameterSampler
 from sklearn.ensemble import AdaBoostRegressor
 
-from experiments.common import get_data, parser, subsample
+from experiments.common import TUNE_DIR, get_data, parser, subsample
 from src.artifacts import experiment_info, output_dir, write_json
 from src.config import RANDOM_STATE
 from src.models import make_model, save_best_params
@@ -152,7 +152,7 @@ def main(argv=None):
         write_json(out / "best_params" / f"{name}.json", best)
         if args.publish_params:
             save_best_params(name, best)
-            canonical = out.parents[1] / "tuning"
+            canonical = TUNE_DIR
             canonical.mkdir(exist_ok=True)
             table.drop(columns="params").to_csv(canonical / f"{name}.csv", index=False)
         winner = curves[curves["candidate"] == table.iloc[0]["candidate"]]
