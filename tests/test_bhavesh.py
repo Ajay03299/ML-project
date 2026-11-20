@@ -307,7 +307,7 @@ def test_benchmark_timing_repeat_requires_real_frozen_data(arguments):
     assert exc.value.code == 2
 
 
-def test_timing_repeat_with_changed_validation_cannot_replace_any_results(setup, tmp_path, monkeypatch):
+def test_invalid_timing_repeats_cannot_replace_any_results(setup, tmp_path, monkeypatch):
     from experiments import bhavesh_benchmark_timing_recheck as recheck
     from src.artifacts import file_hash
     panel, splits, info = setup
@@ -345,6 +345,9 @@ def test_timing_repeat_with_changed_validation_cannot_replace_any_results(setup,
     monkeypatch.setattr(recheck, "make_model", lambda *args, **kwargs: ChangedPredictor())
     if recheck.os.name == "nt":
         monkeypatch.setattr(recheck.ctypes.windll.kernel32, "SetThreadExecutionState", lambda state: 0x80000000)
+    with pytest.raises(SystemExit) as exc:
+        recheck.main(["--model", "XGBoost"])
+    assert exc.value.code == 2
     with pytest.raises(ValueError, match="frozen validation"):
         recheck.main(["--model", name])
     assert before == {p.name: p.read_bytes() for p in tmp_path.iterdir() if p.is_file()}

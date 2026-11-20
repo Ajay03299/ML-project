@@ -35,6 +35,8 @@ def main(argv=None):
     name = args.model
     if (info["run_id"] != freeze["run_id"] or info["environment"] != freeze["environment"]):
         ap.error("The data, rows, features and environment must match the frozen run.")
+    if name not in freeze["parameter_file_hashes"] or name not in freeze["best_params"]:
+        ap.error(f"{name} was not included in this frozen comparison.")
     if file_hash(BEST_DIR / f"{name}.json") != freeze["parameter_file_hashes"][name]:
         ap.error("Parameters changed; no timing data was replaced.")
     events = json.loads((out / "system_resume_audit.json").read_text(encoding="utf-8-sig"))
