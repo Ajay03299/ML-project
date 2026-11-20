@@ -66,6 +66,28 @@ def test_explicit_rerun_directory_isolates_smoke_outputs(tmp_path, setup, source
     assert expected.is_dir()
 
 
+def test_custom_artifact_directory_still_publishes_to_team_tuning(tmp_path, setup, monkeypatch):
+    from experiments import bhavesh_boosting as boosting
+    panel, splits, _ = setup
+    destination = tmp_path / "reports" / "rerun"
+    canonical = tmp_path / "team_tuning"
+    monkeypatch.setattr(boosting, "get_data", lambda args: (panel, splits))
+    monkeypatch.setattr(boosting, "TUNE_DIR", canonical)
+    published = []
+    monkeypatch.setattr(boosting, "save_best_params", lambda name, params: published.append(name))
+    best = {"n_estimators": 2}
+    table = pd.DataFrame([{"candidate": 0, "selected_rounds": 2, "val_MAE": 1.0, "params": best}])
+    curves = pd.DataFrame({"round": [1, 2], "candidate": [0, 0],
+                           "train_MAE": [2.0, 1.0], "val_MAE": [3.0, 1.0]})
+    monkeypatch.setattr(boosting, "search_model", lambda *args, **kwargs: (best, table, curves))
+    boosting.main(["--source", "madrid", "--horizon", "4", "--n-sensors", "4",
+                   "--models", "AdaBoost", "--publish-params", "--output-dir", str(destination)])
+    assert published == ["AdaBoost"]
+    assert (destination / "tuning/AdaBoost.csv").exists()
+    pd.testing.assert_frame_equal(pd.read_csv(canonical / "AdaBoost.csv"), table.drop(columns="params"))
+    assert not (tmp_path / "tuning/AdaBoost.csv").exists()
+
+
 def test_subset_freeze_excludes_unrequested_models(tmp_path, monkeypatch, setup):
     from experiments import bhavesh_final_benchmark as benchmark
     from src import evaluate
