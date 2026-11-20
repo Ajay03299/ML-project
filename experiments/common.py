@@ -42,6 +42,8 @@ def parser(description: str) -> argparse.ArgumentParser:
     ap.add_argument("--max-train-rows", type=int, default=config.MAX_TRAIN_ROWS)
     ap.add_argument("--tune-rows", type=int, default=config.TUNE_ROWS)
     ap.add_argument("--quick", action="store_true", help="tiny grids and samples, to check the script runs")
+    ap.add_argument("--output-dir", type=Path, default=None,
+                    help="Bhavesh artifact directory; use a new directory when the dataset changes")
     return ap
 
 

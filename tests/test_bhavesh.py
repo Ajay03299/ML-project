@@ -12,7 +12,7 @@ from app.forecast_data import day_forecasts, sensor_map, serving_dataset
 from experiments.analysis_c_efficiency import compatible_benchmark, nested_indices, pareto, time_prediction
 from experiments.bhavesh_boosting import GRIDS, main as boosting_main, round_parameter, search_model
 from experiments.bhavesh_boosting import staged_mae
-from src.artifacts import experiment_info
+from src.artifacts import experiment_info, output_dir
 from src.data import load_panel
 from src.features import build_dataset
 from src.models import make_model
@@ -50,6 +50,54 @@ def test_smoke_run_cannot_publish_team_parameters():
     with pytest.raises(SystemExit) as exc:
         boosting_main(["--source", "synthetic", "--publish-params"])
     assert exc.value.code == 2
+
+
+@pytest.mark.parametrize("source,quick,suffix", [
+    ("madrid", False, None),
+    ("madrid", True, "madrid_smoke"),
+    ("synthetic", False, "synthetic_smoke"),
+])
+def test_explicit_rerun_directory_isolates_smoke_outputs(tmp_path, setup, source, quick, suffix):
+    panel, _, _ = setup
+    destination = tmp_path / "madrid_v2"
+    args = SimpleNamespace(source=source, quick=quick, output_dir=destination, horizon=4)
+    expected = destination if suffix is None else destination / suffix
+    assert output_dir(args, panel) == expected
+    assert expected.is_dir()
+
+
+def test_subset_freeze_excludes_unrequested_models(tmp_path, monkeypatch, setup):
+    from experiments import bhavesh_final_benchmark as benchmark
+    from src import evaluate
+    panel, splits, info = setup
+    destination = tmp_path / "rerun"
+    best = tmp_path / "best"
+    best.mkdir()
+    # No teammate parameter files exist: a subset must require only its own.
+    (best / "Ridge.json").write_text('{"alpha": 0.1}')
+    monkeypatch.setattr(benchmark, "BEST_DIR", best)
+    monkeypatch.setattr(benchmark, "get_data", lambda args: (panel, splits))
+    monkeypatch.setattr(benchmark, "best_params", lambda name: {"alpha": 0.1})
+    monkeypatch.setattr(benchmark, "make_model", lambda name: object())
+    monkeypatch.setattr(benchmark, "set_threads", lambda model, threads: model)
+    called = []
+    def record(name, splits, panel, args, model):
+        called.append(name)
+    monkeypatch.setattr(benchmark, "finalize", record)
+    csv = tmp_path / "benchmark.csv"
+    monkeypatch.setattr(evaluate, "RESULTS_CSV", csv)
+    args = ["--source", "synthetic", "--horizon", "4", "--n-sensors", "4",
+            "--output-dir", str(destination), "--models", "Ridge", "Ridge"]
+    pd.DataFrame([
+        {"run_id": info["run_id"], "tag": "all", "model": "Ridge", "test_MAE": 1},
+        {"run_id": info["run_id"], "tag": "all", "model": "DecisionTree", "test_MAE": 2},
+    ]).to_csv(csv, index=False)
+    benchmark.main(args)
+    out = destination / "synthetic_smoke"
+    freeze = json.loads((out / "benchmark_freeze.json").read_text())
+    assert called == freeze["models_requested"] == ["Ridge"]
+    assert "DecisionTree" in freeze["models_excluded"]
+    assert pd.read_csv(out / "frozen_benchmark.csv")["model"].tolist() == ["Ridge"]
 
 
 def test_pareto_handles_equal_cost_and_error_ties_independent_of_order():
@@ -104,6 +152,10 @@ def test_changed_traffic_and_static_attributes_are_rejected(setup):
     static.iloc[0, 0] += 0.01
     with pytest.raises(ValueError, match="changed since training"):
         serving_dataset(dataclasses.replace(panel, static=static), info)
+    weather = panel.weather.copy()
+    weather.iloc[-1, 0] += 1
+    with pytest.raises(ValueError, match="changed since training"):
+        serving_dataset(dataclasses.replace(panel, weather=weather), info)
 
 
 def test_target_day_includes_previous_day_origins_and_aligned_actuals(setup):
