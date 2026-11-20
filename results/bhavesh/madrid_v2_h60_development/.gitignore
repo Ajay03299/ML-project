@@ -1,0 +1,8 @@
+# Regenerated raw observations stay local; compact evidence is tracked.
+tuning/*_rounds.csv
+logs/
+execution.json
+efficiency_measurements.csv
+scaling_evaluations.csv
+*_before_timing_recheck.csv
+!frozen_benchmark_before_timing_recheck.csv
