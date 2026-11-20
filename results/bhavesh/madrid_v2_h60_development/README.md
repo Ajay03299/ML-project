@@ -22,6 +22,20 @@ selects its settings and round count on validation, using 30,000 training rows.
 The test period is not used for tuning. Ridge uses Ajay's v2 validation-selected
 parameters already on main; teammates' parameter files are not modified.
 
+Validation selection on the 30,000-row tuning sample:
+
+| Model | Selected rounds | v2 validation MAE | Earlier no-weather validation MAE |
+|---|---:|---:|---:|
+| AdaBoost | 200 | 44.346 | 44.275 |
+| GradientBoosting | 300 | 43.588 | 43.607 |
+| HistGradientBoosting | 600 | 40.618 | 40.371 |
+
+All three winners reach their searched round limit. AdaBoost and HistGB retain
+their previous selected settings; classic GB changes from 298 to 300 rounds.
+The refreshed validation scores do not establish an improvement from weather.
+The grids and candidate counts are unchanged; no search was expanded after
+seeing test results. Exact values are in `tuning_summary.csv`.
+
 The frozen contributor comparison includes the five baselines and Bhavesh's
 three boosters. It is separate from Anirudh's complete team benchmark; omitted
 models must not be ranked against these results using older feature setups.
