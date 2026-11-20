@@ -104,6 +104,11 @@ comparison/baseline controls work, and invalid hourly times are explained.
 The CSV check covers direct serialization roundtrips; a browser download was not
 exercised. Saved-model hashes are recorded in that verification file.
 
+Final source verification: 46 tests passed in the isolated runtime, and dependency,
+bytecode-compilation and diff checks passed. `artifact_verification.json` checks
+the eight-model snapshot, all 20 scaling points, input/parameter/model hashes and
+preservation of test metrics through the timing repair.
+
 Full per-round CSVs, raw timing observations, command logs and fitted models are
 generated locally by these commands. The PRs retain compact result tables,
 parameter files, provenance manifests and figures. No dataset, model binaries or
