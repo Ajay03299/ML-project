@@ -95,6 +95,21 @@ streamlit run app/streamlit_app.py
 
 Figures go to `results/figures/`, tables to `results/`.
 
+For a rebuilt panel, keep Bhavesh's artifacts separate from the historical
+no-weather run with `--output-dir results/bhavesh/madrid_v2_h60_development`.
+Use that same option for boosting tuning, the frozen comparison, Analysis C and
+the consistency check. Quick/synthetic outputs get a separate smoke subdirectory.
+The frozen comparison accepts `--models` to evaluate a contributor subset, for example:
+
+```bash
+python -m experiments.bhavesh_boosting --tune-rows 30000 --publish-params --output-dir results/bhavesh/madrid_v2_h60_development
+python -m experiments.bhavesh_final_benchmark --threads 2 --models Persistence SeasonalNaive_day SeasonalNaive_week HistoricalAverage Ridge AdaBoost GradientBoosting HistGradientBoosting --output-dir results/bhavesh/madrid_v2_h60_development
+```
+
+The subset and omitted models are recorded in `benchmark_freeze.json`. This is a
+contributor comparison; Anirudh still owns the final complete team benchmark.
+Data/feature signatures, shared configuration and teammate parameter files are unchanged.
+
 ## Forecast-origin features and evaluation safeguards
 
 | File | Role |

@@ -71,6 +71,14 @@ def experiment_info(panel, splits, args):
 def output_dir(args, panel):
     """Smoke outputs cannot overwrite the team's real-data parameter files."""
     mode = "smoke" if args.quick or args.source == "synthetic" else "development"
+    requested = getattr(args, "output_dir", None)
+    if requested is not None:
+        path = Path(requested)
+        # A quick or synthetic run must not overwrite a real-data rerun either.
+        if mode == "smoke":
+            path = path / f"{args.source}_smoke"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
     path = Path(__file__).resolve().parents[1] / "results" / "bhavesh" / (
         f"{args.source}_h{args.horizon * panel.step_min}_{mode}")
     path.mkdir(parents=True, exist_ok=True)
