@@ -1,0 +1,95 @@
+{
+  "model": "GradientBoosting",
+  "run_id": "9adb1c2116ffbf69ac1e3fbc35f1e454b4d7d2d0df8ad5eff001396ccc98ff51",
+  "n_train": 200000,
+  "threads": 2,
+  "original_observation": {
+    "model": "GradientBoosting",
+    "tag": "all",
+    "owner": "Bhavesh",
+    "horizon_min": 60,
+    "n_train": 200000,
+    "n_features": 32,
+    "train_time_s": 22222.74913050001,
+    "val_MAE": 40.56804010067928,
+    "val_RMSE": 64.37113953483193,
+    "val_R2": 0.9865395109326656,
+    "val_WAPE": 0.0672874953771012,
+    "test_MAE": 45.26865535545174,
+    "test_RMSE": 78.26274172151625,
+    "test_R2": 0.9806981109460282,
+    "test_WAPE": 0.0740917409706201,
+    "predict_ms_per_1000": 14.339270080233565,
+    "model_size_kb": 1189.634765625,
+    "source": "madrid",
+    "dataset_id": "c38b4434486605d1dd4f15e54952e10fbd042322cd8dba758363f6cb6273da8c",
+    "run_id": "9adb1c2116ffbf69ac1e3fbc35f1e454b4d7d2d0df8ad5eff001396ccc98ff51"
+  },
+  "repeat_wall_s": 666.2495530999731,
+  "repeat_process_cpu_s": 659.34375,
+  "repeat_val_MAE": 40.56804010067928,
+  "started_at_utc": "2026-11-20T15:39:04.411161+00:00",
+  "finished_at_utc": "2026-11-20T15:50:10.660742+00:00",
+  "same_validation_score": true,
+  "test_used": false,
+  "saved_model_replaced": false,
+  "parameter_file_sha256": "8e6ac1e15b2b5dc3284bc4cb12d155e363276b73af78f3f3402916db09ffbf68",
+  "reason": "Original fit spanned Windows sleep and hardware-clock corrections",
+  "system_events": [
+    {
+      "TimeCreated": "2026-11-20T13:24:26.6683948+05:30",
+      "Id": 42,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system is entering sleep.\r\n\r\nSleep Reason: System Idle"
+    },
+    {
+      "TimeCreated": "2026-11-20T13:24:27.6132729+05:30",
+      "Id": 107,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system has resumed from sleep."
+    },
+    {
+      "TimeCreated": "2026-11-20T13:24:49.5005314+05:30",
+      "Id": 1,
+      "ProviderName": "Microsoft-Windows-Kernel-General",
+      "Message": "The system time has changed to \u200e2026\u200e-\u200e11\u200e-\u200e20T07:54:49.500000000Z from \u200e2026\u200e-\u200e11\u200e-\u200e20T07:54:27.612953200Z.\r\nTime Delta: 21887 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: \u200e2026\u200e-\u200e11\u200e-\u200e20T13:24:49.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+    },
+    {
+      "TimeCreated": "2026-11-20T14:04:26.4575073+05:30",
+      "Id": 42,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system is entering sleep.\r\n\r\nSleep Reason: Button or Lid"
+    },
+    {
+      "TimeCreated": "2026-11-20T14:04:27.361694+05:30",
+      "Id": 107,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system has resumed from sleep."
+    },
+    {
+      "TimeCreated": "2026-11-20T17:51:47.5006755+05:30",
+      "Id": 1,
+      "ProviderName": "Microsoft-Windows-Kernel-General",
+      "Message": "The system time has changed to \u200e2026\u200e-\u200e11\u200e-\u200e20T12:21:47.500000000Z from \u200e2026\u200e-\u200e11\u200e-\u200e20T08:34:27.361426900Z.\r\nTime Delta: 13640138 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: \u200e2026\u200e-\u200e11\u200e-\u200e20T17:51:47.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+    },
+    {
+      "TimeCreated": "2026-11-20T17:52:49.9285355+05:30",
+      "Id": 42,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system is entering sleep.\r\n\r\nSleep Reason: Button or Lid"
+    },
+    {
+      "TimeCreated": "2026-11-20T17:52:50.7147075+05:30",
+      "Id": 107,
+      "ProviderName": "Microsoft-Windows-Kernel-Power",
+      "Message": "The system has resumed from sleep."
+    },
+    {
+      "TimeCreated": "2026-11-20T19:51:41.5006894+05:30",
+      "Id": 1,
+      "ProviderName": "Microsoft-Windows-Kernel-General",
+      "Message": "The system time has changed to \u200e2026\u200e-\u200e11\u200e-\u200e20T14:21:41.500000000Z from \u200e2026\u200e-\u200e11\u200e-\u200e20T12:22:50.714516900Z.\r\nTime Delta: 7130785 ms\r\n\r\nChange Reason: System time synchronized with the hardware clock.\r\nProcess: '' (PID 4).\r\n\r\nRTC time: \u200e2026\u200e-\u200e11\u200e-\u200e20T19:51:41.500000000Z\r\nCurrent time zone bias: -330\r\nRTC time is in UTC: false\r\nSystem time was based on RTC time: false"
+    }
+  ],
+  "automatic_sleep_inhibition": "current timed process; previous state restored"
+}

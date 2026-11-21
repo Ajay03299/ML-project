@@ -319,3 +319,57 @@ def test_supporting_tuning_keeps_shared_owner_outputs_untouched(setup, tmp_path,
     assert sentinel.read_text() == "owner results\n"
     assert json.loads((destination / "best_params/Ridge.json").read_text()) == best
     assert len(pd.read_csv(destination / "tuning/Ridge.csv")) == len(table) == 1
+
+
+@pytest.mark.parametrize("arguments", [["--quick"], ["--source", "synthetic"]])
+def test_benchmark_timing_repeat_requires_real_frozen_data(arguments):
+    from experiments.bhavesh_benchmark_timing_recheck import main
+    with pytest.raises(SystemExit) as exc:
+        main(["--model", "GradientBoosting", *arguments])
+    assert exc.value.code == 2
+
+
+def test_invalid_timing_repeats_cannot_replace_any_results(setup, tmp_path, monkeypatch):
+    from experiments import bhavesh_benchmark_timing_recheck as recheck
+    from src.artifacts import file_hash
+    panel, splits, info = setup
+    name = "GradientBoosting"
+    params = tmp_path / "params"
+    params.mkdir()
+    parameter_file = params / f"{name}.json"
+    parameter_file.write_text("{}")
+    freeze = dict(info, threads=2, best_params={name: {}},
+                  parameter_file_hashes={name: file_hash(parameter_file)})
+    (tmp_path / "benchmark_freeze.json").write_text(json.dumps(freeze))
+    (tmp_path / "system_resume_audit.json").write_text(json.dumps([{"Id": 107}]))
+    (tmp_path / "efficiency_manifest.json").write_text(json.dumps(info))
+    row = {"model": name, "run_id": info["run_id"], "val_MAE": 1e9,
+           "test_MAE": 123.0, "train_time_s": 60.0}
+    files = [tmp_path / f for f in ("frozen_benchmark.csv", "benchmark.csv", "efficiency.csv")]
+    for path in files:
+        pd.DataFrame([row]).to_csv(path, index=False)
+    pd.DataFrame([{"model": name, "n_train": info["n_train"]}]).to_csv(tmp_path / "scaling.csv", index=False)
+    pd.DataFrame([{"model": name, "phase": "fit", "seconds": 60.0}]).to_csv(
+        tmp_path / "efficiency_measurements.csv", index=False)
+    before = {p.name: p.read_bytes() for p in tmp_path.iterdir() if p.is_file()}
+    monkeypatch.setattr(recheck, "get_data", lambda args: (panel, splits))
+    monkeypatch.setattr(recheck, "experiment_info", lambda *args: info)
+    monkeypatch.setattr(recheck, "output_dir", lambda *args: tmp_path)
+    monkeypatch.setattr(recheck, "BEST_DIR", params)
+    monkeypatch.setattr(recheck, "RESULTS_CSV", tmp_path / "benchmark.csv")
+
+    class ChangedPredictor:
+        def fit(self, X, y):
+            return self
+        def predict(self, X):
+            return np.zeros(len(X))
+
+    monkeypatch.setattr(recheck, "make_model", lambda *args, **kwargs: ChangedPredictor())
+    if recheck.os.name == "nt":
+        monkeypatch.setattr(recheck.ctypes.windll.kernel32, "SetThreadExecutionState", lambda state: 0x80000000)
+    with pytest.raises(SystemExit) as exc:
+        recheck.main(["--model", "XGBoost"])
+    assert exc.value.code == 2
+    with pytest.raises(ValueError, match="frozen validation"):
+        recheck.main(["--model", name])
+    assert before == {p.name: p.read_bytes() for p in tmp_path.iterdir() if p.is_file()}

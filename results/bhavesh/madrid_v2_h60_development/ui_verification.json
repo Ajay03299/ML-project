@@ -1,0 +1,74 @@
+{
+  "status": "pass",
+  "method": "Streamlit AppTest and direct real-data inference; no browser download verification",
+  "run_id": "9adb1c2116ffbf69ac1e3fbc35f1e454b4d7d2d0df8ad5eff001396ccc98ff51",
+  "dataset_id": "c38b4434486605d1dd4f15e54952e10fbd042322cd8dba758363f6cb6273da8c",
+  "n_features": 32,
+  "model_hashes": {
+    "AdaBoost": "ce1153f5eb58e27e53c412b5b700871908e83a6363f5a9f6c62231d85ce129ec",
+    "GradientBoosting": "e161675d9d2cc6ec7ef84d11956409e3ef62e2809ac124fb4e2c2b7859f95b53",
+    "HistGradientBoosting": "6481022da367ea50c02f2f92e2dc432ae75d6d5e36c81c29a8f92120e07e5c5d"
+  },
+  "model_cases": [
+    {
+      "model": "AdaBoost",
+      "sensor": 3397,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 451.985284411718,
+      "day_rows": 24,
+      "day_MAE": 40.864397801720514
+    },
+    {
+      "model": "AdaBoost",
+      "sensor": 10945,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 1190.4747191011236,
+      "day_rows": 24,
+      "day_MAE": 73.78054439562179
+    },
+    {
+      "model": "GradientBoosting",
+      "sensor": 3397,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 484.3540643909582,
+      "day_rows": 24,
+      "day_MAE": 43.063589291684046
+    },
+    {
+      "model": "GradientBoosting",
+      "sensor": 10945,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 1175.2296418397427,
+      "day_rows": 24,
+      "day_MAE": 68.46228966993785
+    },
+    {
+      "model": "HistGradientBoosting",
+      "sensor": 3397,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 478.72784600726806,
+      "day_rows": 24,
+      "day_MAE": 43.28354820336125
+    },
+    {
+      "model": "HistGradientBoosting",
+      "sensor": 10945,
+      "target_date": "2023-10-30",
+      "target_time": "2023-10-30 08:00:00",
+      "forecast": 1176.159127913488,
+      "day_rows": 24,
+      "day_MAE": 67.71735043606266
+    }
+  ],
+  "cases": 6,
+  "csv_scope": "Direct day-forecast serialization roundtrip; actual browser download was not exercised.",
+  "comparison_control": "three boosters",
+  "baseline_toggle_preserved_selection": true,
+  "invalid_hourly_time_reported": true,
+  "verified_at_utc": "2026-11-20T15:52:10.922577+00:00"
+}

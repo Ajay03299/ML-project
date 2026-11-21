@@ -333,8 +333,9 @@ fixed validation period. It measures row-count scaling, not shorter-history
 robustness. Parameters stay frozen. The largest-size timing repetitions and frozen validation score are reused
 from the full-size audit to avoid duplicate fits; smaller sizes receive new fits.
 Test scores are reused from the benchmark;
-no scaling run reads test labels. Models absent from scaling: {sorted(missing)}.
-Models absent from the complete team benchmark: {info['missing_benchmark_models']}.
+no scaling run reads test labels. Scaling models: {sorted(scaling['model'].unique().tolist())}.
+Requested scaling models unavailable in this benchmark: {sorted(missing)}.
+Registered models not covered by this benchmark: {info['missing_benchmark_models']}.
 
 Feature construction, data ingestion, network overhead, concurrent requests and
 cold model loading are excluded. No measured estimator latency establishes an
