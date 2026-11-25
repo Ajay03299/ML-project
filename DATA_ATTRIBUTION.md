@@ -22,7 +22,7 @@ of Intelligent Transportation Systems (2025), DOI 10.1109/OJITS.2025.3637305.
 
 Experiment changes: select 60 of the 300 supplied sensors; retain the team's
 archival missing/long-zero quality screen; construct forecasting features from
-past observations; exclude legacy weather with unverified fill provenance;
+past observations; 
 apply a chronological split and row budget. Raw aggregation, timezone details and
 the historical vintage of static road metadata were not independently verified.
 No claim of endorsement by the data authors or city is made.
