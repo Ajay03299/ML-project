@@ -91,7 +91,6 @@ def main(argv=None):
 
     # 8 neighbouring sensors: correlation vs distance
     if p.static is not None and {"latitude", "longitude"} <= set(p.static.columns):
-        from src.features import nearest_by_distance  # noqa: F401
         lat, lon = np.radians(p.static["latitude"].to_numpy(float)), np.radians(p.static["longitude"].to_numpy(float))
         h = (np.sin((lat[:, None] - lat[None, :]) / 2) ** 2
              + np.cos(lat)[:, None] * np.cos(lat)[None, :] * np.sin((lon[:, None] - lon[None, :]) / 2) ** 2)
