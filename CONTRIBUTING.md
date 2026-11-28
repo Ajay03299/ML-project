@@ -15,4 +15,4 @@
    do NOT commit `results/benchmark.csv` (everyone's runs write to it). Anirudh runs the final benchmark.
 9. Do not weaken the leakage test in `tests/test_pipeline.py`.
 
-Milestones: models freeze Tue 24 Nov, code freeze Sat 28 Nov (tag `v1.0-submission`), submit by Mon 30 Nov.
+
