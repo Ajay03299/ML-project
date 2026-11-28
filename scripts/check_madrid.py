@@ -109,7 +109,7 @@ def main(argv=None) -> int:
                 "(if this is not plausible in degrees C, treat it as an encoded value, not physical units)"]
     if files["coords"] is not None:
         c = pd.read_csv(files["coords"])
-        out += [f"\n## Coordinates and adjacency\n", f"- coordinates file: {len(c)} rows, columns {list(c.columns)}"]
+        out += ["\n## Coordinates and adjacency\n", f"- coordinates file: {len(c)} rows, columns {list(c.columns)}"]
     if files["adj"] is not None:
         A = np.load(files["adj"])
         out += [f"- adjacency shape {A.shape}, symmetric {bool(np.allclose(A, A.T))}, "

@@ -3,8 +3,6 @@
 Controlled thread budget, shared evaluate_model and shared save_for_ui are used.
 """
 
-import json
-from pathlib import Path
 from threadpoolctl import threadpool_limits
 
 from experiments.common import get_data, parser, finalize
